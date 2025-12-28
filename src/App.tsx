@@ -26,6 +26,7 @@ import AppList from './components/AppList';
 import AppFormDialog from './components/AppFormDialog';
 import FilterPanel from './components/FilterPanel';
 import ImportExportDialog from './components/ImportExportDialog';
+import Footer from './components/Footer';
 
 function App() {
   const [apps, setApps] = useState<AndroidApp[]>([]);
@@ -183,18 +184,57 @@ function App() {
           <Box sx={{ textAlign: 'center', mt: 4 }}>
             <Typography variant="h6" color="text.secondary">
               No apps match the selected filters
+      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Android Apps Manager
             </Typography>
-          </Box>
-        )}
+            <IconButton color="inherit" onClick={() => setIsImportExportOpen(true)}>
+              <Typography variant="button" sx={{ mr: 1 }}>
+                Import/Export
+              </Typography>
+            </IconButton>
+            <IconButton color="inherit" onClick={toggleTheme}>
+              {themeMode === 'dark' ? <Brightness7 /> : <Brightness4 />}
+            </IconButton>
+          </Toolbar>
+        </AppBar>
 
-        {apps.length === 0 && (
-          <Box sx={{ textAlign: 'center', mt: 4 }}>
-            <Typography variant="h6" color="text.secondary">
-              No apps yet. Click the + button to add your first app!
-            </Typography>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 8, flexGrow: 1 }}>
+          <Box sx={{ mb: 3 }}>
+            <FilterPanel
+              allTags={allTags}
+              selectedTags={selectedTags}
+              onTagsChange={setSelectedTags}
+            />
           </Box>
-        )}
-      </Container>
+
+          <AppList
+            apps={filteredApps}
+            onEdit={handleEditApp}
+            onDelete={handleDeleteApp}
+          />
+
+          {filteredApps.length === 0 && apps.length > 0 && (
+            <Box sx={{ textAlign: 'center', mt: 4 }}>
+              <Typography variant="h6" color="text.secondary">
+                No apps match the selected filters
+              </Typography>
+            </Box>
+          )}
+
+          {apps.length === 0 && (
+            <Box sx={{ textAlign: 'center', mt: 4 }}>
+              <Typography variant="h6" color="text.secondary">
+                No apps yet. Click the + button to add your first app!
+              </Typography>
+            </Box>
+          )}
+        </Container>
+
+        <Footer />
+      </Box>
 
       <Fab
         color="primary"
