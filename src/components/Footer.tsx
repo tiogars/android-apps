@@ -1,13 +1,13 @@
-import { Box, Container, IconButton, Tooltip, Typography } from '@mui/material';
+import { Box, Container, IconButton, Tooltip, Divider } from '@mui/material';
 import { GitHub, BugReport } from '@mui/icons-material';
 
 export default function Footer() {
   const handleRepoClick = () => {
-    window.open('https://github.com/tiogars/android.tiogars.fr', '_blank');
+    window.open('https://github.com/tiogars/android.tiogars.fr', '_blank', 'noopener,noreferrer');
   };
 
   const handleIssueClick = () => {
-    window.open('https://github.com/tiogars/android.tiogars.fr/issues/new', '_blank');
+    window.open('https://github.com/tiogars/android.tiogars.fr/issues/new', '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -41,9 +41,7 @@ export default function Footer() {
               <GitHub />
             </IconButton>
           </Tooltip>
-          <Typography variant="body2" color="text.secondary">
-            |
-          </Typography>
+          <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
           <Tooltip title="Report an Issue">
             <IconButton
               color="primary"
