@@ -46,10 +46,12 @@ function App() {
     severity: 'info',
   });
 
-  // Load apps from local storage on mount
+  // Load apps from storage on mount (IndexedDB)
   useEffect(() => {
-    const savedApps = storageService.getApps();
-    setApps(savedApps); // eslint-disable-line react-hooks/set-state-in-effect
+    (async () => {
+      const savedApps = await storageService.getApps();
+      setApps(savedApps); // eslint-disable-line react-hooks/set-state-in-effect
+    })();
 
     // Load theme preference
     const savedTheme = localStorage.getItem('theme-mode') as ThemeMode;
@@ -77,7 +79,7 @@ function App() {
     setThemeMode((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
-  const handleSaveApp = (app: AndroidApp) => {
+  const handleSaveApp = async (app: AndroidApp) => {
     let updatedApps: AndroidApp[];
     if (editingApp) {
       updatedApps = apps.map((a) => (a.id === app.id ? app : a));
@@ -87,15 +89,15 @@ function App() {
       setSnackbar({ open: true, message: 'App added successfully', severity: 'success' });
     }
     setApps(updatedApps);
-    storageService.saveApps(updatedApps);
+    await storageService.saveApps(updatedApps);
     setIsFormOpen(false);
     setEditingApp(null);
   };
 
-  const handleDeleteApp = (id: string) => {
+  const handleDeleteApp = async (id: string) => {
     const updatedApps = apps.filter((a) => a.id !== id);
     setApps(updatedApps);
-    storageService.saveApps(updatedApps);
+    await storageService.saveApps(updatedApps);
     setSnackbar({ open: true, message: 'App deleted successfully', severity: 'success' });
   };
 
@@ -109,9 +111,9 @@ function App() {
     setIsFormOpen(true);
   };
 
-  const handleImport = (jsonString: string) => {
+  const handleImport = async (jsonString: string) => {
     try {
-      const importedApps = storageService.importData(jsonString);
+      const importedApps = await storageService.importData(jsonString);
       setApps(importedApps);
       setSnackbar({ open: true, message: 'Data imported successfully', severity: 'success' });
     } catch (error) {
@@ -119,8 +121,8 @@ function App() {
     }
   };
 
-  const handleExport = () => {
-    const jsonString = storageService.exportData();
+  const handleExport = async () => {
+    const jsonString = await storageService.exportData();
     const blob = new Blob([jsonString], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
