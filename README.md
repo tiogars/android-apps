@@ -19,7 +19,8 @@ A React TypeScript web application for managing your Android apps collection in 
 
 ### Prerequisites
 
-- Node.js 18+ and pnpm
+- Node.js 18+
+- pnpm (Install with: `npm install -g pnpm` or see [pnpm.io](https://pnpm.io/installation))
 
 ### Installation
 
