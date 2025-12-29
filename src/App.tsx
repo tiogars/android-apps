@@ -40,12 +40,18 @@ import Footer from './components/Footer';
  * @returns The extracted app name, or the original title if no quotes found
  */
 function extractAppNameFromTitle(title: string): string {
-  // Match text within single quotes (') or double quotes (")
+  // Match text within matching pairs of quotes
   // Handles regular quotes, smart quotes, and Unicode variants
-  const quoteMatch = title.match(/[''""]([^''""]*)[''"]/);
+  // Try single quote patterns first (regular and smart quotes)
+  const singleQuoteMatch = title.match(/['']([^'']*)['']/);
+  if (singleQuoteMatch && singleQuoteMatch[1]) {
+    return singleQuoteMatch[1].trim();
+  }
   
-  if (quoteMatch && quoteMatch[1]) {
-    return quoteMatch[1].trim();
+  // Try double quote patterns (regular and smart quotes)
+  const doubleQuoteMatch = title.match(/[""]([^""]*)[""]/);
+  if (doubleQuoteMatch && doubleQuoteMatch[1]) {
+    return doubleQuoteMatch[1].trim();
   }
   
   // If no quotes found, return the original title
