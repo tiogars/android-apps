@@ -69,10 +69,16 @@ function App() {
       // Extract package name from Play Store URL
       let packageName = '';
       if (sharedUrl && sharedUrl.includes('play.google.com')) {
-        const urlParts = sharedUrl.split('?');
-        if (urlParts.length > 1) {
-          const urlParams = new URLSearchParams(urlParts[1]);
-          packageName = urlParams.get('id') || '';
+        try {
+          const url = new URL(sharedUrl);
+          packageName = url.searchParams.get('id') || '';
+        } catch (error) {
+          // If URL parsing fails, try the old method as fallback
+          const urlParts = sharedUrl.split('?');
+          if (urlParts.length > 1) {
+            const urlParams = new URLSearchParams(urlParts[1]);
+            packageName = urlParams.get('id') || '';
+          }
         }
       }
 
@@ -86,8 +92,8 @@ function App() {
         icon: '',
       };
 
-      setEditingApp(newApp);  
-      setIsFormOpen(true);  
+      setEditingApp(newApp);
+      setIsFormOpen(true);
 
       // Clear the URL parameters
       window.history.replaceState({}, '', window.location.pathname);
