@@ -50,13 +50,52 @@ function App() {
   useEffect(() => {
     (async () => {
       const savedApps = await storageService.getApps();
-      setApps(savedApps); // eslint-disable-line react-hooks/set-state-in-effect
+      setApps(savedApps);  
     })();
 
     // Load theme preference
     const savedTheme = localStorage.getItem('theme-mode') as ThemeMode;
     if (savedTheme) {
       setThemeMode(savedTheme); // eslint-disable-line react-hooks/set-state-in-effect
+    }
+
+    // Handle share target
+    const params = new URLSearchParams(window.location.search);
+    const sharedTitle = params.get('title');
+    const sharedText = params.get('text');
+    const sharedUrl = params.get('url');
+
+    if (sharedTitle || sharedText || sharedUrl) {
+      // Extract package name from Play Store URL
+      let packageName = '';
+      if (sharedUrl) {
+        try {
+          const url = new URL(sharedUrl);
+          // Validate that the hostname is exactly play.google.com
+          if (url.hostname === 'play.google.com') {
+            packageName = url.searchParams.get('id') || '';
+          }
+        } catch (error) {
+          // Invalid URL, packageName remains empty
+          console.warn('Failed to parse shared URL:', error);
+        }
+      }
+
+      // Create a new app with shared data
+      const newApp: AndroidApp = {
+        id: crypto.randomUUID(),
+        name: sharedTitle || '',
+        packageName: packageName || '',
+        description: sharedText || '',
+        category: [],
+        icon: '',
+      };
+
+      setEditingApp(newApp);
+      setIsFormOpen(true);
+
+      // Clear the URL parameters
+      window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
 

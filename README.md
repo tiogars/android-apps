@@ -9,11 +9,13 @@ A React TypeScript web application for managing your Android apps collection in 
 - 🏷️ **Category Tags**: Organize apps with multiple category tags
 - 🔍 **Smart Filtering**: Filter apps by categories
 - 🎨 **Theme Toggle**: Switch between light and dark themes
-- 💾 **Local Storage**: All data persists in your browser
+- 💾 **Local Storage**: All data persists in your browser using IndexedDB
 - 📦 **Import/Export**: Backup and restore your data with JSON files
 - 🔗 **Play Store Links**: Quick access to apps on Google Play Store
 - 🖼️ **Icon Upload**: Upload custom app icons
 - 📱 **Responsive Design**: Works great on desktop, tablet, and mobile
+- 🚀 **Progressive Web App (PWA)**: Install on your device for offline access
+- 🔗 **Share Target**: Share apps directly from the Play Store to this app
 
 ## Getting Started
 
@@ -79,13 +81,54 @@ The built files will be in the `dist` directory.
 
 Click the **Play Store** button on any app card to open it in the Google Play Store.
 
+## Progressive Web App (PWA)
+
+This application is a fully-featured Progressive Web App that can be installed on your device.
+
+### Installing the PWA
+
+#### On Desktop (Chrome, Edge, Brave)
+1. Visit the website
+2. Look for the install icon (➕ or ⬇️) in the address bar
+3. Click "Install" to add it to your desktop
+
+#### On Mobile (Android)
+1. Visit the website in Chrome
+2. Tap the three-dot menu
+3. Select "Add to Home screen" or "Install app"
+4. The app will appear on your home screen like a native app
+
+### Share Target Feature
+
+The PWA supports receiving shared content from other apps, particularly from the Google Play Store:
+
+1. **Install the PWA** on your Android device (see instructions above)
+2. Open an app in the **Google Play Store**
+3. Tap the **Share** button
+4. Select **Android Apps Manager** from the share menu
+5. The app will open with a pre-filled form containing:
+   - App name
+   - Package name (extracted from the Play Store URL)
+   - Description
+
+This makes it easy to quickly add apps to your collection directly from the Play Store!
+
+### Offline Support
+
+Once installed, the PWA includes:
+- **Offline functionality**: Access your app collection without an internet connection
+- **Service Worker caching**: Fast loading and reliable performance
+- **Installable**: Works like a native app on your device
+
 ## Technology Stack
 
 - **React 19** - UI framework
 - **TypeScript** - Type-safe JavaScript
 - **Vite** - Build tool and dev server
 - **Material-UI (MUI)** - Component library
-- **Local Storage API** - Data persistence
+- **IndexedDB** - Primary data persistence
+- **Service Worker** - Offline support and caching
+- **Web App Manifest** - PWA configuration
 
 ## License
 
