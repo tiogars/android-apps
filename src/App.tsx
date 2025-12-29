@@ -34,13 +34,6 @@ import Footer from './components/Footer';
 
 /**
  * Extracts the app name from a shared title.
- * Google Play Store shares typically come in format: "Découvrez 'App Name' sur Google Play"
- * This function extracts the text within quotes.
- * @param title - The shared title from Google Play Store
- * @returns The extracted app name, or the original title if no quotes found
- */
-/**
- * Extracts the app name from a shared title.
  * Google Play Store shares typically come in formats like:
  * - "Découvrez 'App Name' sur Google Play" (French with regular quotes)
  * - "Check out 'App Name' on Google Play" (English with smart quotes)
