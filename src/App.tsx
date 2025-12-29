@@ -44,25 +44,25 @@ function extractAppNameFromTitle(title: string): string {
   // Handles regular quotes, smart quotes, and Unicode variants
   
   // Try regular single quotes
-  let match = title.match(/'([^'']*)'/);
+  let match = title.match(/'([^']*)'/);
   if (match && match[1]) {
     return match[1].trim();
   }
   
-  // Try smart single quotes (left and right)
-  match = title.match(/'([^'']*)'/); 
+  // Try smart single quotes (left \u2018 and right \u2019)
+  match = title.match(/\u2018([^\u2018\u2019]*)\u2019/);
   if (match && match[1]) {
     return match[1].trim();
   }
   
   // Try regular double quotes
-  match = title.match(/"([^""]*)"/);
+  match = title.match(/"([^"]*)"/);
   if (match && match[1]) {
     return match[1].trim();
   }
   
-  // Try smart double quotes (left and right)
-  match = title.match(/"([^""]*)"/);  
+  // Try smart double quotes (left \u201C and right \u201D)
+  match = title.match(/\u201C([^\u201C\u201D]*)\u201D/);
   if (match && match[1]) {
     return match[1].trim();
   }
