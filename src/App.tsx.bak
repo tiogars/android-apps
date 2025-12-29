@@ -50,7 +50,7 @@ function extractAppNameFromTitle(title: string): string {
   }
   
   // Try smart single quotes (left and right)
-  match = title.match(/'([^'']*)'/); 
+  match = title.match(/'([^']*)'/);
   if (match && match[1]) {
     return match[1].trim();
   }
@@ -62,7 +62,7 @@ function extractAppNameFromTitle(title: string): string {
   }
   
   // Try smart double quotes (left and right)
-  match = title.match(/"([^""]*)"/);  
+  match = title.match(/"([^"]*)"/);
   if (match && match[1]) {
     return match[1].trim();
   }
