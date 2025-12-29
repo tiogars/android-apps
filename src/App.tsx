@@ -50,13 +50,43 @@ function App() {
   useEffect(() => {
     (async () => {
       const savedApps = await storageService.getApps();
-      setApps(savedApps); // eslint-disable-line react-hooks/set-state-in-effect
+      setApps(savedApps);  
     })();
 
     // Load theme preference
     const savedTheme = localStorage.getItem('theme-mode') as ThemeMode;
     if (savedTheme) {
       setThemeMode(savedTheme); // eslint-disable-line react-hooks/set-state-in-effect
+    }
+
+    // Handle share target
+    const params = new URLSearchParams(window.location.search);
+    const sharedTitle = params.get('title');
+    const sharedText = params.get('text');
+    const sharedUrl = params.get('url');
+
+    if (sharedTitle || sharedText || sharedUrl) {
+      // Extract package name from Play Store URL
+      let packageName = '';
+      if (sharedUrl && sharedUrl.includes('play.google.com')) {
+        const urlParams = new URLSearchParams(sharedUrl.split('?')[1]);
+        packageName = urlParams.get('id') || '';
+      }
+
+      // Create a new app with shared data
+      const newApp: Partial<AndroidApp> = {
+        id: crypto.randomUUID(),
+        name: sharedTitle || '',
+        packageName: packageName || '',
+        description: sharedText || '',
+        category: [],
+      };
+
+      setEditingApp(newApp as AndroidApp);  
+      setIsFormOpen(true);  
+
+      // Clear the URL parameters
+      window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
 

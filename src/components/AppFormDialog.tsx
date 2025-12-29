@@ -42,7 +42,7 @@ export default function AppFormDialog({ open, app, onClose, onSave }: AppFormDia
         icon: app.icon || '',
       });
     } else {
-      setFormData({ // eslint-disable-line react-hooks/set-state-in-effect
+      setFormData({  
         name: '',
         packageName: '',
         category: [],
