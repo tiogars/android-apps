@@ -68,17 +68,16 @@ function App() {
     if (sharedTitle || sharedText || sharedUrl) {
       // Extract package name from Play Store URL
       let packageName = '';
-      if (sharedUrl && sharedUrl.includes('play.google.com')) {
+      if (sharedUrl) {
         try {
           const url = new URL(sharedUrl);
-          packageName = url.searchParams.get('id') || '';
-        } catch (error) {
-          // If URL parsing fails, try the old method as fallback
-          const urlParts = sharedUrl.split('?');
-          if (urlParts.length > 1) {
-            const urlParams = new URLSearchParams(urlParts[1]);
-            packageName = urlParams.get('id') || '';
+          // Validate that the hostname is exactly play.google.com
+          if (url.hostname === 'play.google.com') {
+            packageName = url.searchParams.get('id') || '';
           }
+        } catch (error) {
+          // Invalid URL, packageName remains empty
+          console.warn('Failed to parse shared URL:', error);
         }
       }
 
