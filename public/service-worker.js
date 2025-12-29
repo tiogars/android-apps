@@ -56,17 +56,17 @@ self.addEventListener('fetch', (event) => {
         
         return fetch(fetchRequest).then((response) => {
           // Check if valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
+          if (!response || response.status !== 200 || (response.type !== 'basic' && response.type !== 'cors')) {
             return response;
           }
           
           // Clone the response
           const responseToCache = response.clone();
           
-          // Cache the fetched response
+          // Cache the fetched response asynchronously (don't block response)
           caches.open(CACHE_NAME)
             .then((cache) => {
-              cache.put(event.request, responseToCache);
+              return cache.put(event.request, responseToCache);
             })
             .catch((error) => {
               console.error('Cache put failed:', error);
