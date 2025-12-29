@@ -39,32 +39,38 @@ import Footer from './components/Footer';
  * @param title - The shared title from Google Play Store
  * @returns The extracted app name, or the original title if no quotes found
  */
+/**
+ * Extracts the app name from a shared title.
+ * Google Play Store shares typically come in formats like:
+ * - "Découvrez 'App Name' sur Google Play" (French with regular quotes)
+ * - "Check out 'App Name' on Google Play" (English with smart quotes)
+ * - "Download \"App Name\" from Play Store" (with double quotes)
+ * 
+ * This function extracts the text within quotes (regular or smart).
+ * 
+ * @param title - The shared title from Google Play Store
+ * @returns The extracted app name, or the original title if no quotes found
+ * 
+ * @example
+ * extractAppNameFromTitle("Découvrez 'WhatsApp' sur Google Play")  // Returns: "WhatsApp"
+ * extractAppNameFromTitle("TikTok")  // Returns: "TikTok"
+ */
 function extractAppNameFromTitle(title: string): string {
   // Match text within matching pairs of quotes
   // Handles regular quotes, smart quotes, and Unicode variants
   
-  // Try regular single quotes
-  let match = title.match(/'([^']*)'/);
-  if (match && match[1]) {
-    return match[1].trim();
-  }
+  const patterns = [
+    /'([^']*)'/,                          // Regular single quotes
+    /\u2018([^\u2018\u2019]*)\u2019/,     // Smart single quotes (left \u2018, right \u2019)
+    /"([^"]*)"/,                          // Regular double quotes
+    /\u201C([^\u201C\u201D]*)\u201D/,     // Smart double quotes (left \u201C, right \u201D)
+  ];
   
-  // Try smart single quotes (left \u2018 and right \u2019)
-  match = title.match(/\u2018([^\u2018\u2019]*)\u2019/);
-  if (match && match[1]) {
-    return match[1].trim();
-  }
-  
-  // Try regular double quotes
-  match = title.match(/"([^"]*)"/);
-  if (match && match[1]) {
-    return match[1].trim();
-  }
-  
-  // Try smart double quotes (left \u201C and right \u201D)
-  match = title.match(/\u201C([^\u201C\u201D]*)\u201D/);
-  if (match && match[1]) {
-    return match[1].trim();
+  for (const pattern of patterns) {
+    const match = title.match(pattern);
+    if (match && match[1]) {
+      return match[1].trim();
+    }
   }
   
   // If no quotes found, return the original title
@@ -122,7 +128,7 @@ function App() {
 
       // Create a new app with shared data
       // Extract app name from title (removes "Découvrez '...' sur Google Play" wrapper)
-      const appName = sharedTitle ? extractAppNameFromTitle(sharedTitle) : '';
+      const appName = extractAppNameFromTitle(sharedTitle || '');
       
       const newApp: AndroidApp = {
         id: crypto.randomUUID(),
