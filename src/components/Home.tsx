@@ -47,12 +47,9 @@ export default function Home({ apps, onEdit, onDelete }: HomeProps) {
     if (tags.length === 0) {
       setSearchParams({});
     } else {
+      // For URL-based filtering, we support single category selection
       setSearchParams({ category: tags[0] });
     }
-  };
-
-  const handleEditApp = (app: AndroidApp) => {
-    onEdit(app);
   };
 
   return (
@@ -67,7 +64,7 @@ export default function Home({ apps, onEdit, onDelete }: HomeProps) {
 
       <AppList
         apps={filteredApps}
-        onEdit={handleEditApp}
+        onEdit={onEdit}
         onDelete={onDelete}
       />
 
