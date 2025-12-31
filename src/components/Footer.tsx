@@ -5,6 +5,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
   const inceptionYear = 2025;
   const copyrightYear = inceptionYear === currentYear ? `${inceptionYear}` : `${inceptionYear}-${currentYear}`;
+  const appVersion = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev';
 
   const handleRepoClick = () => {
     window.open('https://github.com/tiogars/android.tiogars.fr', '_blank', 'noopener,noreferrer');
@@ -38,10 +39,15 @@ export default function Footer() {
     >
       <Container maxWidth="lg">
         <Stack spacing={2} alignItems="center">
-          {/* Copyright */}
-          <Typography variant="body2" color="text.secondary">
-            © {copyrightYear} Android Apps Manager
-          </Typography>
+          {/* Copyright and Version */}
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="body2" color="text.secondary">
+              © {copyrightYear} Android Apps Manager
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Version {appVersion}
+            </Typography>
+          </Box>
 
           {/* GitHub Links */}
           <Box
