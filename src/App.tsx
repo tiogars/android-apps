@@ -36,6 +36,13 @@ const AppDetail = lazy(() => import('./components/AppDetail'));
 const AppFormDialog = lazy(() => import('./components/AppFormDialog'));
 const ImportExportDialog = lazy(() => import('./components/ImportExportDialog'));
 
+// Loading fallback component
+const LoadingFallback = () => (
+  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+    <CircularProgress />
+  </Box>
+);
+
 /**
  * Extracts the app name from a shared title.
  * Google Play Store shares typically come in formats like:
@@ -259,11 +266,7 @@ function App() {
           <Route
             path="/"
             element={
-              <Suspense fallback={
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
-                  <CircularProgress />
-                </Box>
-              }>
+              <Suspense fallback={<LoadingFallback />}>
                 <Home
                   apps={apps}
                   onEdit={handleEditApp}
@@ -275,11 +278,7 @@ function App() {
           <Route
             path="/app/:id"
             element={
-              <Suspense fallback={
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
-                  <CircularProgress />
-                </Box>
-              }>
+              <Suspense fallback={<LoadingFallback />}>
                 <AppDetail
                   apps={apps}
                   onEdit={handleEditApp}
@@ -332,6 +331,7 @@ function App() {
         />
       </SpeedDial>
 
+      {/* Dialog components use null fallback to avoid loading flicker for small, fast-loading components */}
       <Suspense fallback={null}>
         <AppFormDialog
           open={isFormOpen}
