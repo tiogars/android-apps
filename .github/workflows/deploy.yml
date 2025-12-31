@@ -56,13 +56,32 @@ jobs:
           echo "New version: $NEW_VERSION"
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
           
-          # Update package.json version using npm version (works with pnpm too)
-          npm version $NEW_VERSION --no-git-tag-version
+          # Update package.json version using pnpm
+          pnpm version $NEW_VERSION --no-git-tag-version
           
-          # Commit and push version bump
+          # Commit and push version bump with conflict handling
           git add package.json
           git commit -m "chore: bump version to $NEW_VERSION [skip ci]"
-          git push
+          
+          # Pull any changes that might have been pushed in the meantime
+          git pull --rebase origin main || true
+          
+          # Push with retry logic
+          for i in {1..3}; do
+            if git push; then
+              echo "Successfully pushed version bump"
+              break
+            else
+              echo "Push failed, attempt $i of 3"
+              if [ $i -lt 3 ]; then
+                git pull --rebase origin main
+                sleep 2
+              else
+                echo "Failed to push after 3 attempts"
+                exit 1
+              fi
+            fi
+          done
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
