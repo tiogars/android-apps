@@ -14,7 +14,11 @@ function injectBuildTimestamp(): Plugin {
       if (fs.existsSync(swPath)) {
         let content = fs.readFileSync(swPath, 'utf-8');
         const buildTimestamp = Date.now().toString();
-        content = content.replace('__BUILD_TIMESTAMP__', buildTimestamp);
+        // Only replace the first occurrence in the CACHE_VERSION line
+        content = content.replace(
+          /const CACHE_VERSION = '__BUILD_TIMESTAMP__';/,
+          `const CACHE_VERSION = '${buildTimestamp}';`
+        );
         fs.writeFileSync(swPath, content);
         console.log(`✓ Service worker updated with build timestamp: ${buildTimestamp}`);
       }

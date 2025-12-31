@@ -10,7 +10,9 @@ export interface ServiceWorkerConfig {
   onSuccess?: (registration: ServiceWorkerRegistration) => void;
 }
 
-export function registerServiceWorker(config?: ServiceWorkerConfig): void {
+export function registerServiceWorker(config?: ServiceWorkerConfig): () => void {
+  let updateCheckInterval: ReturnType<typeof setInterval> | null = null;
+
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       const swUrl = '/service-worker.js';
@@ -24,7 +26,7 @@ export function registerServiceWorker(config?: ServiceWorkerConfig): void {
           registration.update();
 
           // Check for updates every hour
-          setInterval(() => {
+          updateCheckInterval = setInterval(() => {
             registration.update();
           }, 60 * 60 * 1000);
 
@@ -60,6 +62,13 @@ export function registerServiceWorker(config?: ServiceWorkerConfig): void {
       });
     });
   }
+
+  // Return cleanup function
+  return () => {
+    if (updateCheckInterval) {
+      clearInterval(updateCheckInterval);
+    }
+  };
 }
 
 /**

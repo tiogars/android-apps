@@ -9,7 +9,7 @@ export default function Root() {
 
   useEffect(() => {
     // Register service worker with update detection
-    registerServiceWorker({
+    const cleanup = registerServiceWorker({
       onUpdate: (reg) => {
         console.log('App update available');
         setUpdateAvailable(true);
@@ -19,6 +19,9 @@ export default function Root() {
         console.log('Service worker registered successfully');
       },
     });
+
+    // Cleanup interval on unmount
+    return cleanup;
   }, []);
 
   const handleUpdateClick = () => {
