@@ -2,12 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { storageService } from './storageService';
 import type { AndroidApp } from './types';
 
-// Mock IndexedDB
-const mockIDB = {
-  open: vi.fn(),
-  deleteDatabase: vi.fn(),
-};
-
 describe('storageService', () => {
   beforeEach(() => {
     // Clear localStorage before each test
