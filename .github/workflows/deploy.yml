@@ -57,7 +57,7 @@ jobs:
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
           
           # Update package.json version using pnpm
-          pnpm version $NEW_VERSION --no-git-tag-version
+          pnpm version "$NEW_VERSION" --no-git-tag-version
           
           # Commit version bump
           git add package.json
@@ -88,7 +88,7 @@ jobs:
                   git pull origin main
                   
                   # Reapply version bump
-                  pnpm version $NEW_VERSION --no-git-tag-version
+                  pnpm version "$NEW_VERSION" --no-git-tag-version
                   git add package.json
                   git commit -m "chore: bump version to $NEW_VERSION [skip ci]"
                   sleep 2
